@@ -4,15 +4,18 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"strings"
 )
 
 var (
-	apiToken = "863be942d8456f146e61026f7cf69dc78efda801"
-	baseUrl  = "https://api.pipedrive.com/v1/deals/"
+	apiToken      = "863be942d8456f146e61026f7cf69dc78efda801"
+	apiTokenParam = "?api_token=" + apiToken
+	baseUrl       = "https://api.pipedrive.com/v1/deals/"
 )
 
 func main() {
 	http.HandleFunc("/deals", handler)
+	http.HandleFunc("/deals/", handler)
 	log.Println("Server listening on localhost:8080")
 	log.Fatal(http.ListenAndServe(":8080", nil))
 
@@ -29,7 +32,11 @@ func handler(rw http.ResponseWriter, req *http.Request) {
 
 func proxyRequest(rw http.ResponseWriter, req *http.Request) {
 	client := &http.Client{}
-	proxyReq, err := http.NewRequest(req.Method, baseUrl+"?api_token="+apiToken, req.Body)
+
+	path := strings.TrimPrefix(req.URL.Path, "/deals")
+	targetURL := baseUrl + path + apiTokenParam
+
+	proxyReq, err := http.NewRequest(req.Method, targetURL, req.Body)
 	if err != nil {
 		http.Error(rw, "Failed to create request", http.StatusInternalServerError)
 		return
