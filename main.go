@@ -42,18 +42,14 @@ func main() {
 
 }
 
-func getCurrentTime() string {
-	return time.Now().Format(time.RFC3339)
-}
-
 func handler(rw http.ResponseWriter, req *http.Request) {
-	log.Printf("%s Handling %s request for %s\n", getCurrentTime(), req.Method, req.URL.Path)
+	log.Printf("Handling %s request for %s\n", req.Method, req.URL.Path)
 	switch req.Method {
 	case http.MethodGet, http.MethodPost, http.MethodPut:
 		proxyRequest(rw, req)
 	default:
 		http.Error(rw, "Method "+req.Method+" not allowed", http.StatusMethodNotAllowed)
-		log.Printf("%s Method %s not allowed for %s\n", getCurrentTime(), req.Method, req.URL.Path)
+		log.Printf("Method %s not allowed for %s\n", req.Method, req.URL.Path)
 	}
 }
 
@@ -63,11 +59,11 @@ func proxyRequest(rw http.ResponseWriter, req *http.Request) {
 	path := strings.TrimPrefix(req.URL.Path, "/deals")
 	targetURL := baseUrl + path + apiTokenParam
 
-	log.Printf("%s Proxy request handling started for %s %s", getCurrentTime(), req.Method, req.URL.Path)
+	log.Printf("Proxy request handling started for %s %s", req.Method, req.URL.Path)
 	proxyReq, err := http.NewRequest(req.Method, targetURL, req.Body)
 	if err != nil {
 		http.Error(rw, "Failed to create request", http.StatusInternalServerError)
-		log.Printf("%s Failed to create request for %s: %v\n", getCurrentTime(), targetURL, err)
+		log.Printf("Failed to create request for %s: %v\n", targetURL, err)
 		return
 	}
 
@@ -77,7 +73,7 @@ func proxyRequest(rw http.ResponseWriter, req *http.Request) {
 	proxyResp, err := client.Do(proxyReq)
 	if err != nil {
 		http.Error(rw, "Failed to get response from target URL", http.StatusInternalServerError)
-		log.Printf("%s Failed to get response from %s: %v\n", getCurrentTime(), targetURL, err)
+		log.Printf("Failed to get response from %s: %v\n", targetURL, err)
 		return
 	}
 
@@ -96,11 +92,11 @@ func proxyRequest(rw http.ResponseWriter, req *http.Request) {
 	_, err = io.Copy(rw, proxyResp.Body)
 	if err != nil {
 		http.Error(rw, "Failed to copy response body", http.StatusInternalServerError)
-		log.Printf("%s Failed to copy response body for %s: %v\n", getCurrentTime(), targetURL, err)
+		log.Printf("Failed to copy response body for %s: %v\n", targetURL, err)
 	}
 
 	updateMetrics(req.Method, latency)
-	log.Printf("%s Request successfully completed: %s %s\n", getCurrentTime(), req.Method, req.URL.Path)
+	log.Printf("%s %s Request successfully completed with status %d \n", req.Method, req.URL.Path, proxyResp.StatusCode)
 
 }
 
@@ -151,16 +147,16 @@ func requestMetricsMiddleware(next http.HandlerFunc) http.HandlerFunc {
 }
 
 func metricsHandler(rw http.ResponseWriter, req *http.Request) {
-	log.Printf("%s Handling %s request for %s", getCurrentTime(), req.Method, req.URL.Path)
+	log.Printf("Handling %s request for %s", req.Method, req.URL.Path)
 	mu.Lock()
 	defer mu.Unlock()
 	rw.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(rw).Encode(metrics)
 
-	log.Printf("%s Successfully returned metrics", getCurrentTime())
+	log.Printf("Successfully returned metrics")
 }
 
 func invalidPathHandler(rw http.ResponseWriter, req *http.Request) {
 	http.Error(rw, "Invalid path", http.StatusNotFound)
-	log.Printf("%s Invalid path accessed: %s\n", getCurrentTime(), req.URL.Path)
+	log.Printf("Invalid path accessed: %s\n", req.URL.Path)
 }
