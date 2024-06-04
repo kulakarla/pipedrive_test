@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func TestProxyRequestResponseEqualToOriginal(t *testing.T) {
+func TestProxyGetRequestResponseEqualToOriginal(t *testing.T) {
 	proxyReq := httptest.NewRequest(http.MethodGet, "/deals", nil)
 	proxyRr := httptest.NewRecorder()
 	handler := http.HandlerFunc(Request)
