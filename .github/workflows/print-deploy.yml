@@ -1,0 +1,13 @@
+name: Log "Deployed" if merge on master
+
+on:
+    pull_request:
+        branches:
+            - main
+jobs:
+    log-deployment:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Log Deployment
+              run: echo "Deployed!"
+
