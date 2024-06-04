@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/http/httptest"
+	"pdrive/pipedrive-test-api/metrics"
 	"pdrive/pipedrive-test-api/utils"
 	"strings"
 	"testing"
@@ -51,7 +52,7 @@ func TestPostHandler(t *testing.T) {
 	id := int(data["id"].(float64))
 	title := data["title"].(string)
 
-	if title != "testingPOX" {
+	if title != "testDeal" {
 		t.Fatalf("Created resource title: got %v want %v", title, "testDeal")
 	}
 
@@ -135,6 +136,7 @@ func TestMetricsHandler(t *testing.T) {
 	rr := httptest.NewRecorder()
 	metricsHandler := http.HandlerFunc(MetricsHandler)
 	dealsHandler := http.HandlerFunc(Handler)
+	metrics.ResetMetrics()
 
 	metricsHandler.ServeHTTP(rr, req)
 

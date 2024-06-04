@@ -64,3 +64,14 @@ func UpdateDuration(method string, duration int64) {
 		methodMetrics.MeanDuration = float64(methodMetrics.TotalDuration) / float64(methodMetrics.TotalRequests)
 	}
 }
+
+func ResetMetrics() {
+	mu.Lock()
+	defer mu.Unlock()
+
+	metrics = Metrics{
+		GET:  MethodMetrics{},
+		POST: MethodMetrics{},
+		PUT:  MethodMetrics{},
+	}
+}
