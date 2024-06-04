@@ -10,10 +10,10 @@ import (
 func TestProxyRequestResponseEqualToOriginal(t *testing.T) {
 	proxyReq := httptest.NewRequest(http.MethodGet, "/deals", nil)
 	proxyRr := httptest.NewRecorder()
-	handler := http.HandlerFunc(ProxyRequest)
+	handler := http.HandlerFunc(Request)
 	handler.ServeHTTP(proxyRr, proxyReq)
 
-	directReq, err := http.NewRequest(http.MethodGet, baseUrl+apiTokenParam, nil)
+	directReq, err := http.NewRequest(http.MethodGet, baseURL+apiTokenParam, nil)
 
 	if err != nil {
 		t.Fatalf("Failed to get direct response: %v", err)

@@ -13,14 +13,15 @@ import (
 const (
 	apiToken      = "863be942d8456f146e61026f7cf69dc78efda801"
 	apiTokenParam = "?api_token=" + apiToken
-	baseUrl       = "https://api.pipedrive.com/v1/deals/"
+	baseURL       = "https://api.pipedrive.com/v1/deals/"
 )
 
-func ProxyRequest(rw http.ResponseWriter, req *http.Request) {
+// Request forwards the request to the PipeDrive API and returns its response
+func Request(rw http.ResponseWriter, req *http.Request) {
 	client := &http.Client{}
 
 	path := strings.TrimPrefix(req.URL.Path, "/deals")
-	targetURL := baseUrl + path + apiTokenParam
+	targetURL := baseURL + path + apiTokenParam
 
 	//log.Printf("Proxy request for: %s %s", req.Method, targetURL)
 
