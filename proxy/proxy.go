@@ -23,8 +23,6 @@ func Request(rw http.ResponseWriter, req *http.Request) {
 	path := strings.TrimPrefix(req.URL.Path, "/deals")
 	targetURL := baseURL + path + apiTokenParam
 
-	//log.Printf("Proxy request for: %s %s", req.Method, targetURL)
-
 	log.Printf("Proxy request handling started for %s %s", req.Method, req.URL.Path)
 	proxyReq, err := http.NewRequest(req.Method, targetURL, req.Body)
 	if err != nil {
@@ -37,6 +35,7 @@ func Request(rw http.ResponseWriter, req *http.Request) {
 
 	startLatency := time.Now()
 	proxyResp, err := client.Do(proxyReq)
+
 	if err != nil {
 		http.Error(rw, "Failed to get response from target URL", http.StatusInternalServerError)
 		log.Printf("Failed to get response from %s: %v\n", targetURL, err)
