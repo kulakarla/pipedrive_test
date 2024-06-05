@@ -99,3 +99,11 @@ To ensure problem-free running of the program, Docker capabilities are added.
 `docker-compose.yml` creates the image specified in the Dockerfile together with port-mapping to ensure no extra work is needed from the user to get the program working locally
 
 `Dockerfile` specifies the base Go image, the workdir, copies and downoads the module dependencies, copies the code to create the executable. Exposes the `8080` port for the container and will run the main program executable.
+
+### `.github/workflows`
+
+This GitHub Actions specific folder contains 2 workflows:
+
+`print-deploy.yml` is a simple workflow that is ran when a pull-request is merged onto `main` (when something is pushed to `main`). It just echo-s `Deployed!`, nothing else.
+
+`test-and-lint.yml` is another simple workflow that runs Go linting and tests when something is pushed to branch that is part of a pull-request
