@@ -17,11 +17,11 @@ To run the program, clone the repository:
 ```sh
 git clone https://github.com/kulakarla/pipedrive_test.git
 ```
-To get the application working, your own PipeDrive API token needs to be configured. Inside `config/config.go`, replace the constant APIToken with your PipeDrive API token. The token can be found while logged in to your PipeDrive account, navigate to the top-right. Click on the little avatar, open up `Personal preferences`, open the `API` tab from where you can find your personal API token.
+To get the application working, your own PipeDrive API token needs to be configured. Inside `config/config.go`, replace the constant `APIToken` with your PipeDrive API token. The token can be found while logged in to your PipeDrive account, navigate to the top-right. Click on the little avatar, open up `Personal preferences`, open the `API` tab from where you can find your personal API token.
 
 For easier running, the application can be ran using a [Docker](https://www.docker.com/) container.
 
-Inside the folder cloned repository folder, run:
+Inside the cloned repository folder, run:
 
 Create the docker image:  
 `docker-compose build`
