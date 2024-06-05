@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"regexp"
 	"sync"
 	"time"
 
@@ -16,11 +17,27 @@ var mu sync.Mutex
 // Handler takes in the request, forwards it to the proxy if it is an allowed request
 func Handler(rw http.ResponseWriter, req *http.Request) {
 	log.Printf("Handling %s request for %s\n", req.Method, req.URL.Path)
+	allowed := false
+
+	getPostDealsPath := regexp.MustCompile(`^/deals/?$`)
+	putDealsPath := regexp.MustCompile(`^/deals/\d+/?$`)
+
 	switch req.Method {
-	case http.MethodGet, http.MethodPost, http.MethodPut:
+	case http.MethodGet, http.MethodPost:
+		if getPostDealsPath.MatchString(req.URL.Path) {
+			allowed = true
+		}
+	case http.MethodPut:
+		if putDealsPath.MatchString(req.URL.Path) {
+			allowed = true
+		}
+
+	}
+
+	if allowed {
 		proxy.Request(rw, req)
-	default:
-		http.Error(rw, "Method "+req.Method+" not allowed", http.StatusMethodNotAllowed)
+	} else {
+		http.Error(rw, "Method "+req.Method+" not allowed for path "+req.URL.Path, http.StatusMethodNotAllowed)
 		log.Printf("Method %s not allowed for %s\n", req.Method, req.URL.Path)
 	}
 }
