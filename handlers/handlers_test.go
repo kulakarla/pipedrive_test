@@ -188,3 +188,71 @@ func TestMetricsHandler(t *testing.T) {
 	}
 
 }
+
+func TestGetDealsByIDNotAllowed(t *testing.T) {
+	req := httptest.NewRequest(http.MethodGet, "/deals/124", nil)
+	rr := httptest.NewRecorder()
+	handler := http.HandlerFunc(Handler)
+
+	handler.ServeHTTP(rr, req)
+
+	if status := rr.Code; status != http.StatusMethodNotAllowed {
+		t.Errorf("Handler returned wrong status code: got %v want %v, body: %v", status, http.StatusMethodNotAllowed, rr.Body.String())
+	}
+
+	expected := "Method GET not allowed for path /deals/124"
+	if !strings.Contains(rr.Body.String(), expected) {
+		t.Errorf("Handler returned unexpected body: got %v want %v", rr.Body.String(), expected)
+	}
+}
+
+func TestDeleteDealsNotAllowed(t *testing.T) {
+	req := httptest.NewRequest(http.MethodDelete, "/deals", nil)
+	rr := httptest.NewRecorder()
+	handler := http.HandlerFunc(Handler)
+
+	handler.ServeHTTP(rr, req)
+
+	if status := rr.Code; status != http.StatusMethodNotAllowed {
+		t.Errorf("Handler returned wrong status code: got %v want %v, body: %v", status, http.StatusMethodNotAllowed, rr.Body.String())
+	}
+
+	expected := "Method DELETE not allowed for path /deals"
+	if !strings.Contains(rr.Body.String(), expected) {
+		t.Errorf("Handler returned unexpected body: got %v want %v", rr.Body.String(), expected)
+	}
+}
+
+func TestPatchMetricsNotAllowed(t *testing.T) {
+	req := httptest.NewRequest(http.MethodPatch, "/metrics", nil)
+	rr := httptest.NewRecorder()
+	handler := http.HandlerFunc(MetricsHandler)
+
+	handler.ServeHTTP(rr, req)
+
+	if status := rr.Code; status != http.StatusMethodNotAllowed {
+		t.Errorf("Handler returned wrong status code: got %v want %v, body: %v", status, http.StatusMethodNotAllowed, rr.Body.String())
+	}
+
+	expected := "Method PATCH not allowed for path /metrics"
+	if !strings.Contains(rr.Body.String(), expected) {
+		t.Errorf("Handler returned unexpected body: got %v want %v", rr.Body.String(), expected)
+	}
+}
+
+func TestInvalidPathHandler(t *testing.T) {
+	req := httptest.NewRequest(http.MethodGet, "/whatever/1251", nil)
+	rr := httptest.NewRecorder()
+	handler := http.HandlerFunc(InvalidPathHandler)
+
+	handler.ServeHTTP(rr, req)
+
+	if status := rr.Code; status != http.StatusNotFound {
+		t.Errorf("Handler returned wrong status code: got %v want %v", status, http.StatusNotFound)
+	}
+
+	expected := "Invalid path"
+	if !strings.Contains(rr.Body.String(), expected) {
+		t.Errorf("Handler returned unexpected body: got %v want %v", rr.Body.String(), expected)
+	}
+}
