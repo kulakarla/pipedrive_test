@@ -60,11 +60,26 @@ func `RequestMetricsMiddleWare` is a wrapper around an end-point request handler
 
 ### `handlers/handlers_test.go`
 
-TBA TBA
+This unit test suite includes test for testing individual handlers.
+
+**TestGetHandler** tests that `GET /deals`  request returns HTTP Status 200 OK  
+**TestPostHandler** tests that `POST /deals`  request returns HTTP Status 201 CREATED and that the response body includes the correct title  
+**TestPutHandler** tests that `PUT /deals/<id>` request changes the currency of a changed deal
+**TestMetricsHandler** tests that `GET /metrics` returns the correct count of requests
+**TestGetDealsByIDNotAllowed** tests that `GET /deals/<id>` is not allowed  
+**TestDeleteDealsNotAllowed** tests that `DELETE /deals` is not allowed  
+**TestPatchMetricsNotAlloed** tests that `PATCH /metrics` is not allowed  
+**TestInvalidPathHandler** tests that `GET /whatever/1251` is an invalid request  
 
 ### `proxy/proxy.go`
 
 func `Request` does the main work of the program - forwards requests to the actual PipeDrive API. From the user sent request to the proxy API, headers and request body are copied and forwarded to the actual PipeDrive API. Response headers and body are then copied and returned back to the user. Additionally, the method calculates the latency of a request.
+
+### `proxy/proxy_test.go`
+
+This unit test sutie includes a test suite for testing the request forwarding.
+
+**TestProxyRequestResponseEqualToDirect** tests that `GET /deals` request response body is the same when calling the PipeDrive API directly and through the proxy, while also checking that the returned header keys and count are the same
 
 ### `metrics/metrics.go`
 
