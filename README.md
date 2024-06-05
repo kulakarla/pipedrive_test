@@ -106,4 +106,4 @@ This GitHub Actions specific folder contains 2 workflows:
 
 `print-deploy.yml` is a simple workflow that is ran when a pull-request is merged onto `main` (when something is pushed to `main`). It just echo-s `Deployed!`, nothing else.
 
-`test-and-lint.yml` is another simple workflow that runs Go linting and tests when something is pushed to branch that is part of a pull-request
+`test-and-lint.yml` is another simple workflow that runs Go linting and tests when something is pushed to branch that is part of a pull-request.
