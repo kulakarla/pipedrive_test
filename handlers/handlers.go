@@ -45,6 +45,21 @@ func Handler(rw http.ResponseWriter, req *http.Request) {
 // MetricsHandler returns the GET /metrics endpoint
 func MetricsHandler(rw http.ResponseWriter, req *http.Request) {
 	log.Printf("Handling %s request for %s", req.Method, req.URL.Path)
+
+	metricsPath := regexp.MustCompile(`^/metrics/?$`)
+
+	if req.Method != http.MethodGet {
+		http.Error(rw, "Method "+req.Method+" not allowed for path "+req.URL.Path, http.StatusMethodNotAllowed)
+		log.Printf("Method %s not allowed for %s\n", req.Method, req.URL.Path)
+		return
+	}
+
+	if !metricsPath.MatchString(req.URL.Path) {
+		http.Error(rw, "Invalid path", http.StatusNotFound)
+		log.Printf("Invalid path accessed: %s\n", req.URL.Path)
+		return
+	}
+
 	mu.Lock()
 	defer mu.Unlock()
 	rw.Header().Set("Content-Type", "application/json")

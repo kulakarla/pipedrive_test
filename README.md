@@ -17,17 +17,21 @@ To run the program, clone the repository:
 ```sh
 git clone https://github.com/kulakarla/pipedrive_test.git
 ```
-To get the application working, your own PipeDrive API token needs to be configured. Inside `config/config.go`, replace the constant APIToken with your PipeDrive API token. The token can be found while logged in to your PipeDrive account, navigate to the top-right. Click on the little avatar, open up `Personal preferences`, open the `API` tab from where you can find your personal API token.
+To get the application working, your own PipeDrive API token needs to be configured. Inside `config/config.go`, replace the constant `APIToken` with your PipeDrive API token. The token can be found while logged in to your PipeDrive account, navigate to the top-right. Click on the little avatar, open up `Personal preferences`, open the `API` tab from where you can find your personal API token.
 
 For easier running, the application can be ran using a [Docker](https://www.docker.com/) container.
 
-Inside the folder cloned repository folder, run:
+Inside the cloned repository folder, run:
 
 Create the docker image:  
-`docker-compose build`
+```
+docker-compose build
+```
 
 Run the container:  
-`docker-compose up`
+```
+docker-compose up
+```
 
 Now you should have a Docker container up and running.
 The API runs on `localhost:8080`
@@ -60,11 +64,26 @@ func `RequestMetricsMiddleWare` is a wrapper around an end-point request handler
 
 ### `handlers/handlers_test.go`
 
-TBA TBA
+This unit test suite includes test for testing individual handlers.
+
+**TestGetHandler** tests that `GET /deals`  request returns HTTP Status 200 OK  
+**TestPostHandler** tests that `POST /deals`  request returns HTTP Status 201 CREATED and that the response body includes the correct title  
+**TestPutHandler** tests that `PUT /deals/<id>` request changes the currency of a changed deal
+**TestMetricsHandler** tests that `GET /metrics` returns the correct count of requests
+**TestGetDealsByIDNotAllowed** tests that `GET /deals/<id>` is not allowed  
+**TestDeleteDealsNotAllowed** tests that `DELETE /deals` is not allowed  
+**TestPatchMetricsNotAlloed** tests that `PATCH /metrics` is not allowed  
+**TestInvalidPathHandler** tests that `GET /whatever/1251` is an invalid request  
 
 ### `proxy/proxy.go`
 
 func `Request` does the main work of the program - forwards requests to the actual PipeDrive API. From the user sent request to the proxy API, headers and request body are copied and forwarded to the actual PipeDrive API. Response headers and body are then copied and returned back to the user. Additionally, the method calculates the latency of a request.
+
+### `proxy/proxy_test.go`
+
+This unit test sutie includes a test suite for testing the request forwarding.
+
+**TestProxyRequestResponseEqualToDirect** tests that `GET /deals` request response body is the same when calling the PipeDrive API directly and through the proxy, while also checking that the returned header keys and count are the same
 
 ### `metrics/metrics.go`
 
