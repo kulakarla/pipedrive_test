@@ -5,17 +5,13 @@ package utils
 import (
 	"log"
 	"net/http"
+	"pdrive/pipedrive-test-api/config"
 )
 
-const (
-	apiToken      = "863be942d8456f146e61026f7cf69dc78efda801"
-	apiTokenParam = "?api_token=" + apiToken
-	baseUrl       = "https://api.pipedrive.com/v1/deals/"
-)
-
+// DeleteCreatedResourceInTests is a helper method to delete the created deals in tests when testing POST/PUT requests
 func DeleteCreatedResourceInTests(id string) error {
 	client := &http.Client{}
-	targetURL := baseUrl + id + apiTokenParam
+	targetURL := config.BaseURL + id + config.ApiTokenParam
 
 	req, err := http.NewRequest(http.MethodDelete, targetURL, nil)
 	if err != nil {

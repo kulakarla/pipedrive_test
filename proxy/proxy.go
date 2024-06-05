@@ -7,13 +7,8 @@ import (
 	"strings"
 	"time"
 
+	"pdrive/pipedrive-test-api/config"
 	"pdrive/pipedrive-test-api/metrics"
-)
-
-const (
-	apiToken      = "863be942d8456f146e61026f7cf69dc78efda801"
-	apiTokenParam = "?api_token=" + apiToken
-	baseURL       = "https://api.pipedrive.com/v1/deals/"
 )
 
 // Request forwards the request to the PipeDrive API and returns its response
@@ -21,7 +16,7 @@ func Request(rw http.ResponseWriter, req *http.Request) {
 	client := &http.Client{}
 
 	path := strings.TrimPrefix(req.URL.Path, "/deals")
-	targetURL := baseURL + path + apiTokenParam
+	targetURL := config.BaseURL + path + config.ApiTokenParam
 
 	log.Printf("Proxy request handling started for %s %s", req.Method, req.URL.Path)
 	proxyReq, err := http.NewRequest(req.Method, targetURL, req.Body)
