@@ -24,10 +24,14 @@ For easier running, the application can be ran using a [Docker](https://www.dock
 Inside the cloned repository folder, run:
 
 Create the docker image:  
-`docker-compose build`
+```
+docker-compose build
+```
 
 Run the container:  
-`docker-compose up`
+```
+docker-compose up
+```
 
 Now you should have a Docker container up and running.
 The API runs on `localhost:8080`
