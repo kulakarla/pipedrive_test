@@ -11,7 +11,7 @@ import (
 // DeleteCreatedResourceInTests is a helper method to delete the created deals in tests when testing POST/PUT requests
 func DeleteCreatedResourceInTests(id string) error {
 	client := &http.Client{}
-	targetURL := config.BaseURL + id + config.ApiTokenParam
+	targetURL := config.BaseURL + id + config.APITokenParam
 
 	req, err := http.NewRequest(http.MethodDelete, targetURL, nil)
 	if err != nil {

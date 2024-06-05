@@ -14,7 +14,7 @@ func TestProxyRequestResponseEqualToDirect(t *testing.T) {
 	handler := http.HandlerFunc(Request)
 	handler.ServeHTTP(proxyRr, proxyReq)
 
-	directReq, err := http.NewRequest(http.MethodGet, config.BaseURL+config.ApiTokenParam, nil)
+	directReq, err := http.NewRequest(http.MethodGet, config.BaseURL+config.APITokenParam, nil)
 
 	if err != nil {
 		t.Fatalf("Failed to get direct response: %v", err)

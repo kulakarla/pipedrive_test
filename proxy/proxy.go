@@ -16,7 +16,7 @@ func Request(rw http.ResponseWriter, req *http.Request) {
 	client := &http.Client{}
 
 	path := strings.TrimPrefix(req.URL.Path, "/deals")
-	targetURL := config.BaseURL + path + config.ApiTokenParam
+	targetURL := config.BaseURL + path + config.APITokenParam
 
 	log.Printf("Proxy request handling started for %s %s", req.Method, req.URL.Path)
 	proxyReq, err := http.NewRequest(req.Method, targetURL, req.Body)
