@@ -97,9 +97,9 @@ variables `Metrics` is used for creating the metrics instance to track and keep 
 
 func `GetMetrics` returns the current metrics of all the endpoints
 
-func `UpdateMetrics` is used for updating the latency metric for given endpoint
+func `UpdateLatencyAndTotalRequestsMetrics` is used for updating the latency and total request metrics for given endpoint
 
-func `UpdateDuration` is used for updating the duration and total requests metrics for given endpoint
+func `UpdateDuration` is used for updating the duration metric for given endpoint
 
 func `ResetMetrics` is an utility tool for reseting the metrics, used for testing purposes
 

@@ -55,6 +55,6 @@ func Request(rw http.ResponseWriter, req *http.Request) {
 		log.Printf("Failed to copy response body for %s: %v\n", targetURL, err)
 	}
 
-	metrics.UpdateMetrics(req.Method, latency)
-	log.Printf("%s %s Request successfully completed with status %d \n", req.Method, req.URL.Path, proxyResp.StatusCode)
+	metrics.UpdateLatencyAndTotalRequestsMetrics(req.Method, latency)
+	log.Printf("%s %s request successfully completed with status %d \n", req.Method, req.URL.Path, proxyResp.StatusCode)
 }
