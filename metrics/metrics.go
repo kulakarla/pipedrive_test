@@ -1,8 +1,11 @@
 package metrics
 
-import "sync"
+import (
+	"log"
+	"sync"
+)
 
-//MethodMetrics defines the metric data shown for different request types in the response
+// MethodMetrics defines the metric data shown for different request types in the response
 type MethodMetrics struct {
 	TotalRequests int64   `json:"total_requests"`
 	MeanDuration  float64 `json:"mean_duration"`
@@ -11,7 +14,7 @@ type MethodMetrics struct {
 	TotalLatency  int64   `json:"total_latency"`
 }
 
-//Metrics defines the overall response body for the metrics request
+// Metrics defines the overall response body for the metrics request
 type Metrics struct {
 	GET  MethodMetrics `json:"GET"`
 	POST MethodMetrics `json:"POST"`
@@ -23,15 +26,16 @@ var (
 	mu      sync.Mutex
 )
 
-//GetMetrics returns the current metrics
+// GetMetrics returns the current metrics
 func GetMetrics() Metrics {
 	return metrics
 }
 
-//UpdateMetrics is an utility function for updating the latency metric
-func UpdateMetrics(method string, latency int64) {
+// UpdateLatencyAndTotalRequestsMetrics is an utility function for updating the latency metric
+func UpdateLatencyAndTotalRequestsMetrics(method string, latency int64) {
 	mu.Lock()
 	defer mu.Unlock()
+	log.Printf("Updating latency and total requests metrics for: %v", method)
 	var methodMetrics *MethodMetrics
 	switch method {
 	case "GET":
@@ -49,10 +53,12 @@ func UpdateMetrics(method string, latency int64) {
 	}
 }
 
-//UpdateDuration is an utility function for updating the resoponse duration metric
+// UpdateDuration is an utility function for updating the resoponse duration metric
 func UpdateDuration(method string, duration int64) {
 	mu.Lock()
 	defer mu.Unlock()
+
+	log.Printf("Updating request duration metrics for: %v", method)
 
 	var methodMetrics *MethodMetrics
 	switch method {
@@ -70,10 +76,12 @@ func UpdateDuration(method string, duration int64) {
 	}
 }
 
-//ResetMetrics is an utility function for testing the metrics handler (reset the metrics before running an unit test)
+// ResetMetrics is an utility function for testing the metrics handler (reset the metrics before running an unit test)
 func ResetMetrics() {
 	mu.Lock()
 	defer mu.Unlock()
+
+	log.Printf("Resetting metrics..")
 
 	metrics = Metrics{
 		GET:  MethodMetrics{},
